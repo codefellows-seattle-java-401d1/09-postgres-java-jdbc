@@ -2,6 +2,7 @@ package dbs;
 
 import models.City;
 import models.Country;
+import models.Languages;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class WorldDB {
     private static final String TEN_SMALLEST_CITIES = "SELECT * FROM city ORDER BY population LIMIT ?";
     private static final String COUNTRY_CODE_LIST = "SELECT code, name FROM country";
 
-    private static final String COUNTRY_LANGUAGES = "SELECT country.name, countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode ORDER BY countrylanguage.language ASC";
+    private static final String COUNTRY_LANGUAGES = "SELECT * FROM countrylanguage JOIN country ON countrylanguage.countrycode = country.code ORDER BY countrylanguage.language ASC";
 
     private Connection conn;
 
@@ -203,30 +204,45 @@ public class WorldDB {
         return cities;
     }
 
-    public List<Country> getCountriesLanguages() {
-        List<Country> countries = new ArrayList<>();
+    public List<Languages> getCountriesLanguages() {
+        List<Languages> languages = new ArrayList<>();
 
         try {
-            PreparedStatement sql = this.conn.prepareStatement(COUNTRY_LANGUAGES);
+            Statement sql = this.conn.createStatement();
+            ResultSet results = sql.executeQuery(COUNTRY_LANGUAGES);
 
-            ResultSet results = sql.executeQuery();
             while (results.next()) {
-                Country country = new Country();
-                country.name = results.getString("name");
-                country.countryCode = results.getString("code");
-                country.population = results.getInt("population");
-                countries.add(country);
+//                Country country = new Country();
+//                country.countryCode = results.getString("code");
+
+                Languages countryLanguage = new Languages();
+                countryLanguage.language = results.getString("name");
+                countryLanguage.countryCode = results.getString("countrycode");
+                countryLanguage.isOfficial = results.getBoolean("isofficial");
+                countryLanguage.percentage = results.getFloat("percentage");
+                languages.add(countryLanguage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return countries;
+        return languages;
     }
 
 }
 
 /*
+Statement sql = this.conn.createStatement();
+            ResultSet results = sql.executeQuery(GET_ALL_CITIES);
+
+            while (results.next()) {
+                City city = new City();
+                city.name = results.getString("name");
+                city.countryCode = results.getString("countrycode");
+                city.population = results.getInt("population");
+                cities.add(city);
+
+
     public List<City> getCitiesInCountry(String countryCode) {
         List<City> cities = new ArrayList<>();
 

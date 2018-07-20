@@ -1,12 +1,14 @@
 package models;
 
 public class Languages {
-    public String countrycode;
+    public String countryCode;
     public String language;
-    public Boolean isofficial;
+    public Boolean isOfficial;
     public Float percentage;
 
     public String toString() {
-        return countrycode + " " + language + " " + "(Official: " + isofficial + ")" + "Percentage of speakers: " + percentage;
+        return countryCode + "   " + "Language: " + language + "\n" +
+                "(Official Language?  " + isOfficial + ")" + "\n" +
+                "Percentage of speakers: " + percentage + "\n";
     }
 }

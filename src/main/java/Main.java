@@ -2,7 +2,9 @@ import com.google.gson.Gson;
 import dbs.WorldDB;
 import models.City;
 import models.Country;
+import models.Languages;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -105,8 +107,8 @@ public class Main {
     public static void countryLanguages () {
         WorldDB db = new WorldDB();
 
-        for (Country country : db.getCountriesLanguages()) {
-            System.out.println(country);
+        for (Languages languages : db.getCountriesLanguages()) {
+            System.out.println(languages);
         }
         System.out.println();
     }
