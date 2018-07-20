@@ -12,6 +12,13 @@ public class WorldDB {
     private static final String GET_ALL_COUNTRIES = "SELECT * FROM country";
     private static final String GET_COUNTRIES_UNDER_LIMIT =
             "SELECT * FROM country WHERE population < ?";
+
+// SQL request for countries above a population limit:
+
+    private static final String GET_COUNTRIES_ABOVE_LIMIT =
+            "SELECT * FROM country WHERE population > ?";
+
+
     private static final String GET_COUNTRIES_BETWEEN =
             "SELECT * FROM country WHERE population > ? AND population < ?";
     private static final String GET_CITIES_COUNTRY =
@@ -79,6 +86,41 @@ public class WorldDB {
 
         return countries;
     }
+
+
+
+
+// My cooool method that makes a request to the database:
+
+
+    public List<Country> getCountriesAbovePopulation(String population) {
+        List<Country> countries = new ArrayList<>();
+
+        try {
+            PreparedStatement sql = this.conn.prepareStatement(GET_COUNTRIES_ABOVE_LIMIT);
+            sql.setInt(1, Integer.parseInt(population));
+
+            ResultSet results = sql.executeQuery();
+
+            while (results.next()) {
+                Country country = new Country();
+                country.name = results.getString("name");
+                country.countryCode = results.getString("code");
+                country.population = results.getInt("population");
+                countries.add(country);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return countries;
+    }
+
+
+
+
+
+
 
     public List<City> getAllCities() {
         List<City> cities = new ArrayList<>();
