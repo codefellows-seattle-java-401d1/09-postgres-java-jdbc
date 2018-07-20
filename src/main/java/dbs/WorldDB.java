@@ -10,14 +10,24 @@ import java.util.Properties;
 
 public class WorldDB {
     private static final String GET_ALL_COUNTRIES = "SELECT * FROM country";
+
     private static final String GET_COUNTRIES_UNDER_LIMIT =
             "SELECT * FROM country WHERE population < ?";
+
     private static final String GET_COUNTRIES_BETWEEN =
             "SELECT * FROM country WHERE population > ? AND population < ?";
+
     private static final String GET_CITIES_COUNTRY =
             "SELECT * FROM city " +
                     "JOIN country ON city.countrycode = country.code " +
                     "WHERE country.code = ?";
+
+    private static final String GET_ALL_CITIES = "SELECT * FROM city";
+    private static final String TEN_LARGEST_CITIES = "SELECT * FROM city ORDER BY population DESC LIMIT ?";
+    private static final String TEN_SMALLEST_CITIES = "SELECT * FROM city ORDER BY population LIMIT ?";
+    private static final String COUNTRY_CODE_LIST = "SELECT code, name FROM country";
+
+    private static final String COUNTRY_LANGUAGES = "SELECT country.name, countrylanguage.language FROM country JOIN countrylanguage ON country.code = countrylanguage.countrycode ORDER BY countrylanguage.language ASC";
 
     private Connection conn;
 
@@ -82,6 +92,22 @@ public class WorldDB {
 
     public List<City> getAllCities() {
         List<City> cities = new ArrayList<>();
+
+        try {
+            Statement sql = this.conn.createStatement();
+            ResultSet results = sql.executeQuery(GET_ALL_CITIES);
+
+            while (results.next()) {
+                City city = new City();
+                city.name = results.getString("name");
+                city.countryCode = results.getString("countrycode");
+                city.population = results.getInt("population");
+                cities.add(city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return cities;
     }
 
@@ -130,4 +156,97 @@ public class WorldDB {
 
         return countries;
     }
+
+    public List<City> getLargestCities(int numberOfCities) {
+        List<City> cities = new ArrayList<>();
+
+        try {
+            PreparedStatement sql = this.conn.prepareStatement(TEN_LARGEST_CITIES);
+            sql.setInt(1, numberOfCities);
+
+            ResultSet results = sql.executeQuery();
+
+            while (results.next()) {
+                City city = new City();
+                city.name = results.getString("name");
+                city.countryCode = results.getString("countrycode");
+                city.population = results.getInt("population");
+                cities.add(city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cities;
+    }
+
+    public List<City> getSmallestCities(int numberOfCities) {
+        List<City> cities = new ArrayList<>();
+
+        try {
+            PreparedStatement sql = this.conn.prepareStatement(TEN_SMALLEST_CITIES);
+            sql.setInt(1, numberOfCities);
+
+            ResultSet results = sql.executeQuery();
+
+            while (results.next()) {
+                City city = new City();
+                city.name = results.getString("name");
+                city.countryCode = results.getString("countrycode");
+                city.population = results.getInt("population");
+                cities.add(city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cities;
+    }
+
+    public List<Country> getCountriesLanguages() {
+        List<Country> countries = new ArrayList<>();
+
+        try {
+            PreparedStatement sql = this.conn.prepareStatement(COUNTRY_LANGUAGES);
+
+            ResultSet results = sql.executeQuery();
+            while (results.next()) {
+                Country country = new Country();
+                country.name = results.getString("name");
+                country.countryCode = results.getString("code");
+                country.population = results.getInt("population");
+                countries.add(country);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return countries;
+    }
+
 }
+
+/*
+    public List<City> getCitiesInCountry(String countryCode) {
+        List<City> cities = new ArrayList<>();
+
+        try {
+            PreparedStatement sql = this.conn.prepareStatement(GET_CITIES_COUNTRY);
+            sql.setString(1, countryCode);
+
+            ResultSet results = sql.executeQuery();
+            while (results.next()) {
+                City city = new City();
+                city.name = results.getString("name");
+                city.countryCode = results.getString("countrycode");
+                city.population = results.getInt("population");
+                cities.add(city);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cities;
+    }
+
+ */
