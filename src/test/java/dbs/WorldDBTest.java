@@ -47,12 +47,11 @@ public class WorldDBTest {
             e.printStackTrace();
         }
 
-//            for (Country country : countries) {
-            for (int i = 0; i < countries.size(); i++)
-            if (countries[i] == 1) {
+            for (Country country : countries) {
+//            for (int i = 0; i < countries.size(); i++)
+            if (country.name.contains("Netherlands")) {
                 isTrue = true;
-            } else {
-                isTrue = false;
+            
             }
         }
 

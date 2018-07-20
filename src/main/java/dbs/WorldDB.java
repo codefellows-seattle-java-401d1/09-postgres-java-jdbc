@@ -212,9 +212,6 @@ public class WorldDB {
             ResultSet results = sql.executeQuery(COUNTRY_LANGUAGES);
 
             while (results.next()) {
-//                Country country = new Country();
-//                country.countryCode = results.getString("code");
-
                 Languages countryLanguage = new Languages();
                 countryLanguage.language = results.getString("name");
                 countryLanguage.countryCode = results.getString("countrycode");
@@ -228,41 +225,4 @@ public class WorldDB {
 
         return languages;
     }
-
 }
-
-/*
-Statement sql = this.conn.createStatement();
-            ResultSet results = sql.executeQuery(GET_ALL_CITIES);
-
-            while (results.next()) {
-                City city = new City();
-                city.name = results.getString("name");
-                city.countryCode = results.getString("countrycode");
-                city.population = results.getInt("population");
-                cities.add(city);
-
-
-    public List<City> getCitiesInCountry(String countryCode) {
-        List<City> cities = new ArrayList<>();
-
-        try {
-            PreparedStatement sql = this.conn.prepareStatement(GET_CITIES_COUNTRY);
-            sql.setString(1, countryCode);
-
-            ResultSet results = sql.executeQuery();
-            while (results.next()) {
-                City city = new City();
-                city.name = results.getString("name");
-                city.countryCode = results.getString("countrycode");
-                city.population = results.getInt("population");
-                cities.add(city);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return cities;
-    }
-
- */
