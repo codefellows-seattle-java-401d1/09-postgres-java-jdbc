@@ -1,3 +1,4 @@
+#Lab 9 - Java with PostgresSQL
 # ![CF](http://i.imgur.com/7v5ASc8.png) Java JDBC Connections
 
 ## Resources  
@@ -23,8 +24,8 @@ Make something cool!
 ## Project Structure
 Your project must have the following classes:
 
-* `main.java.Main` - the bulk of the program. Deals with ALL input/output.
-* `WorldDB` - creates methods used by main.java.Main that query the database.
+* `Main` - the bulk of the program. Deals with ALL input/output.
+* `WorldDB` - creates methods used by Main that query the database.
 * `City` - models the properties of a city
 * `Country` - models the properties of a country
 
