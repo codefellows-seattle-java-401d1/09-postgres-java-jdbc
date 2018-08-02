@@ -4,7 +4,7 @@ import dbInteraction.WorldDBInterface;
 import models.City;
 import models.Country;
 
-public class main {
+public class Main {
     public static void main(String[] args) {
         WorldDBInterface db = new WorldDBInterface();
         Scanner inputTake = new Scanner(System.in);
@@ -63,6 +63,7 @@ public class main {
             }
             //Countries
             if(Selection2==2){
+                System.out.println("Searching countries by population.");
                 System.out.println("Choose the lower bound.");
                 int selectedPopulation = Integer.parseInt(inputTake.nextLine());
                 System.out.println("Choose the upper bound.");

@@ -3,9 +3,11 @@ package dbInteraction;
 import models.City;
 import models.Country;
 
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class WorldDBInterface {
     private static final String GET_ALL_COUNTRIES = "SELECT * FROM country";
@@ -20,11 +22,26 @@ public class WorldDBInterface {
                     "JOIN country ON city.countrycode = country.code " +
                     "WHERE country.code = ?";
 
-    String host = "dbsamples-0.1/world/world.sql";
-    String user = "postgres";
-    String pass = "postgres";
+    private Connection conn;
 
-    private Connection conn = DriverManager.getConnection(host,user,pass);
+    {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String host = "jdbc:postgresql://localhost:5432/world";
+            Properties props = new Properties();
+            props.setProperty("user", "user");
+            props.setProperty("password", "postgres");
+
+            conn = DriverManager.getConnection(host, props);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<Country> getAllCountries(){
         List<Country> countries = new ArrayList<>();
@@ -90,7 +107,7 @@ public class WorldDBInterface {
             ResultSet results = sql.executeQuery();
             while(results.next()){
                 City city = new City();
-                city.name = results.getString("Name");
+                city.name = results.getString("name");
                 city.countryCode = results.getString("countrycode");
                 city.population = results.getInt("population");
                 cities.add(city);
@@ -136,6 +153,7 @@ public class WorldDBInterface {
                 City newCity = new City();
                 newCity.name = results.getString("name");
                 newCity.population = results.getInt("population");
+                newCity.countryCode = results.getString("countrycode");
                 Cities.add(newCity);
             }
 
